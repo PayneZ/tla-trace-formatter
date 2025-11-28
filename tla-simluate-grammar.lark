@@ -1,0 +1,22 @@
+behavior: _LOG* state+ _LOG*
+_LOG: /(?!STATE_\d+ ==)(?!\/\\).+/
+step_name: "\* <" CNAME ("(" CNAME ("," CNAME)*")")* " line " NUMBER ", col " NUMBER " to line " NUMBER ", col " NUMBER " of module " CNAME ">"
+state_name: step_name "STATE_" NUMBER "==" 
+state: state_name ("/\\" variable)*
+variable: CNAME "=" value
+value: function_print | function | sequence | word | set | "\"" word "\""
+function_print: "(" [function_kv_print ("@@" function_kv_print)*] ")"
+function_kv_print: (word | function) ":>" value
+function: "[" [function_kv ("," function_kv)*] "]"
+function_kv: word "|->" value
+set: "{" sequence_list "}"
+SEQ_LEFT_END: "<<"
+SEQ_RIGHT_END: ">>"
+sequence_list: [value ("," value)*]
+sequence: SEQ_LEFT_END sequence_list SEQ_RIGHT_END
+word: /\w+/ | NUMBER
+
+%import common.CNAME
+%import common.NUMBER
+%import common.WS
+%ignore WS

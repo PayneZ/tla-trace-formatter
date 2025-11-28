@@ -1,0 +1,3783 @@
+---------------- MODULE simu_0_0 -----------------
+\* <Init line 262, col 9 to line 268, col 27 of module etcdraft>
+STATE_1 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_2 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_3 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 1,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_4 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 1,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_5 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 1,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 1,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_6 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 1,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 1,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 1,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s1) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_7 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_8 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 1 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_9 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s1) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_10 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_11 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_12 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_13 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_14 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_15 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 0 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_16 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s1) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_17 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s2) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_18 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s2) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_19 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 2,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      2 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      2 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s1) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_20 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_21 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 1 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_22 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_23 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s1) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_24 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_25 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_26 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_27 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s1) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_28 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 1,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s2) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_29 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 2 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_30 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s2) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_31 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_32 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s1) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_33 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_34 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_35 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s1) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_36 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s1) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_37 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_38 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_39 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_40 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_41 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 5 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_42 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 6 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_43 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 6 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 6,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_44 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 7 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 6,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_45 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 8 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 6,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s2) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_46 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 3 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_47 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_48 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 0)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <NextAsync line 714, col 8 to line 714, col 44 of module etcdraft>
+STATE_49 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 2)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> 0)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s3) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_50 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s3,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_51 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 2,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <NextAsync line 714, col 8 to line 714, col 44 of module etcdraft>
+STATE_52 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 0,
+        votedFor |-> 0,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Candidate")
+/\ messages = <<>>
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s3) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_53 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 4 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_54 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 2 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_55 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 3 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_56 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Candidate")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s3) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_57 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 2,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Ready(s1) line 478, col 5 to line 480, col 88 of module etcdraft>
+STATE_58 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_59 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_60 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s2) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_61 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 5 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_62 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_63 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s1) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_64 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 5 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_65 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 5 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 5,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s1,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_66 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 5 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 4,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 5,
+    mdest |-> s1,
+    mvoteGranted |-> TRUE ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 4,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 @@
+  [ msource |-> s1,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 5,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Candidate" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Restart(s1) line 277, col 5 to line 288, col 58 of module etcdraft>
+STATE_67 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 6 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_68 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 7 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <Timeout(s2) line 292, col 15 to line 299, col 89 of module etcdraft>
+STATE_69 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 8 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = <<>>
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s1) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_70 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 8 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 8,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <RequestVote(s2,s3) line 304, col 5 to line 318, col 103 of module etcdraft>
+STATE_71 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 8 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 8,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 8,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Candidate" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+\* <StepDownToFollower(s2) line 491, col 5 to line 493, col 94 of module etcdraft>
+STATE_72 == 
+/\ config = ( s1 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s2 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] @@
+  s3 :> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] )
+/\ votesResponded = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+/\ reconfigCount = 0
+/\ currentTerm = (s1 :> 4 @@ s2 :> 8 @@ s3 :> 3)
+/\ votedFor = (s1 :> s1 @@ s2 :> s2 @@ s3 :> s3)
+/\ pendingMessages = ( [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 8,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s1 ] :>
+      1 @@
+  [ msource |-> s2,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 8,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s3 ] :>
+      1 )
+/\ matchIndex = ( s1 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s2 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) @@
+  s3 :> (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0) )
+/\ commitIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ pendingConfChangeIndex = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0)
+/\ durableState = ( s1 :>
+      [ currentTerm |-> 4,
+        votedFor |-> s1,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s2 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s2,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] @@
+  s3 :>
+      [ currentTerm |-> 3,
+        votedFor |-> s3,
+        log |-> 0,
+        commitIndex |-> 0,
+        config |-> [jointConfig |-> <<{s1, s2, s3}, {}>>, learners |-> {}] ] )
+/\ state = (s1 :> "Follower" @@ s2 :> "Follower" @@ s3 :> "Follower")
+/\ messages = ( [ msource |-> s3,
+    mtype |-> "RequestVoteResponse",
+    mterm |-> 3,
+    mdest |-> s2,
+    mvoteGranted |-> FALSE ] :>
+      1 @@
+  [ msource |-> s3,
+    mtype |-> "RequestVoteRequest",
+    mterm |-> 3,
+    mlastLogTerm |-> 0,
+    mlastLogIndex |-> 0,
+    mdest |-> s2 ] :>
+      1 )
+/\ log = (s1 :> <<>> @@ s2 :> <<>> @@ s3 :> <<>>)
+/\ votesGranted = (s1 :> {} @@ s2 :> {} @@ s3 :> {})
+
+
+=================================================
